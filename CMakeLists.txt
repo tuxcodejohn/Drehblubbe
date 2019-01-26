@@ -32,9 +32,9 @@ add_subdirectory("./libfmt/")
 
 
 set(GUI_SRC_FILES
-	./mainwindow.cc
-	./Motor.cc
-	./main.cc
+	./src/mainwindow.cc
+	./src/Motor.cc
+	./src/main.cc
 )
 
 
