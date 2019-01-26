@@ -28,6 +28,8 @@ class MainWindow : public QMainWindow
 		void on_counterclockwise_btn_clicked();
 		void on_clockwise_btn_clicked();
 		void on_send_btn_clicked();
+		void on_plus_btn_clicked();
+		void on_minus_btn_clicked();
 
 		void on_set_step_btn_clicked();
 

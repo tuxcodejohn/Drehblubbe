@@ -105,3 +105,17 @@ void MainWindow::on_set_step_btn_clicked()
 
 }
 
+void MainWindow::on_plus_btn_clicked()
+{
+	if(motor){
+		motor->send_cmd("+");
+	}
+}
+
+
+void MainWindow::on_minus_btn_clicked()
+{
+	if(motor){
+		motor->send_cmd("-");
+	}
+}
