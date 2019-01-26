@@ -2,65 +2,37 @@
 
 #include <QSerialPort>
 #include <QString>
+#include <string>
 
 #include <fmt/format.h>
 #include <iostream>
+#include <functional>
 
-class Motor
+class Motor: public QObject
 {
-	QSerialPort serport_;
+Q_OBJECT
 
+	QSerialPort serport_;
 	char id_;
 
-	public:
+	std::string linebuf_;
 
-	void send_cmd(std::string cmd)
-	{
-		auto linecmd = fmt::format("#{}{}\r",id_,cmd);
-		std::cout << fmt::format("writing to serport: [[#{}{}]]",id_,cmd) << std::endl;
-		serport_.write(linecmd.data(), linecmd.size());
-	}
+	std::function<void(const std::string&)> logfun_;
 
+public:
+	void send_cmd(std::string cmd);
 
-	public:
-	Motor( const QString& serport_desc , char id = '1'):
-		id_(id)
-	{
-		serport_.setPortName(serport_desc);
-		serport_.setFlowControl(QSerialPort::NoFlowControl);
-		serport_.setBaudRate(QSerialPort::Baud19200);
-		serport_.setDataBits(QSerialPort::Data8);
-		serport_.setParity(QSerialPort::NoParity);
-		serport_.setStopBits(QSerialPort::OneStop);
-		serport_.open(QIODevice::ReadWrite);
-	}
+	Motor( const QString& serport_desc , char id,
+			std::function<void(const std::string&)> logfun);
 
+	void start_motor();
+	void stop_motor();
+	void dir_clockwise();
+	void dir_counterclockwise();
+	void set_max_freq(unsigned spd);
+private slots:
 
-	void start_motor()
-	{
-		send_cmd("A");
-	}
-
-
-	void stop_motor()
-	{
-		send_cmd("S");
-	}
-	
-	void dir_clockwise()
-	{
-		send_cmd("d0");
-	}
-
-	void dir_counterclockwise()
-	{
-		send_cmd("d1");
-	}
-
-	void set_max_freq(unsigned spd)
-	{
-		send_cmd(fmt::format("o{:d}",spd));
-	}
-	
+        void handleReadyRead();
+	void handleError(QSerialPort::SerialPortError error);
 
 };

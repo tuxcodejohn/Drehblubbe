@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
+		
+		void append_to_log(const std::string& s);
 
 	private slots:
 		void on_close_port_btn_clicked();
@@ -25,6 +27,7 @@ class MainWindow : public QMainWindow
 		void on_start_btn_clicked();
 		void on_counterclockwise_btn_clicked();
 		void on_clockwise_btn_clicked();
+		void on_actionExit_triggered();
 
 		void changed_freq_dial(int );
 
@@ -32,6 +35,7 @@ class MainWindow : public QMainWindow
 		Ui::MainWindow *ui;
 
 		std::unique_ptr<Motor> motor;
+
 };
 
 #endif // MAINWINDOW_H

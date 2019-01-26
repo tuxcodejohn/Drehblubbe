@@ -28,6 +28,7 @@ add_subdirectory("./libfmt/")
 
 set(GUI_SRC_FILES
 	./mainwindow.cc
+	./Motor.cc
 	./main.cc
 )
 

@@ -3,6 +3,7 @@
 
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QString>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
         for(auto & qsp_info: qspinfolist){
                 ui->port_selector->insertItem(0,qsp_info.portName());
         }
+
 }
 
 
@@ -29,7 +31,11 @@ void MainWindow::on_open_port_btn_clicked()
 {
 	auto portname = ui->port_selector->currentText();
 	portname.prepend("/dev/");
-	motor = std::make_unique<Motor>(portname,'1');
+
+	motor = std::make_unique<Motor>(portname,'1',
+			[this](const std::string& s){
+				append_to_log(s);
+			});
 }
 
 void MainWindow::on_close_port_btn_clicked()
@@ -73,3 +79,12 @@ void MainWindow::changed_freq_dial(int freq)
 	}
 }
 
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
+}
+
+void MainWindow::append_to_log(const std::string& s)
+{
+	ui->log->append(QString::fromStdString(s));
+}
