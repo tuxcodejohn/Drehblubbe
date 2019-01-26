@@ -27,7 +27,9 @@ class MainWindow : public QMainWindow
 		void on_start_btn_clicked();
 		void on_counterclockwise_btn_clicked();
 		void on_clockwise_btn_clicked();
-		void on_actionExit_triggered();
+		void on_send_btn_clicked();
+
+		void on_set_step_btn_clicked();
 
 		void changed_freq_dial(int );
 

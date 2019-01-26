@@ -3,7 +3,7 @@
 void Motor::send_cmd(std::string cmd)
 {
 	auto linecmd = fmt::format("#{}{}\r",id_,cmd);
-	logfun_(fmt::format("TX:[[#{}{}]]\n",id_,cmd));
+	logfun_(fmt::format("TX:[[#{}{}]]",id_,cmd));
 	serport_.write(linecmd.data(), linecmd.size());
 }
 
@@ -22,8 +22,7 @@ Motor::Motor( const QString& serport_desc , char id,
 	serport_.open(QIODevice::ReadWrite);
 	linebuf_.clear();
 
-	connect(&serport_, &QSerialPort::readyRead,
-		this , &Motor::handleReadyRead);
+	connect(&serport_, &QSerialPort::readyRead, this , &Motor::handleReadyRead);
 	connect(&serport_, static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>
 							(&QSerialPort::error),
 		this, &Motor::handleError);
@@ -59,10 +58,11 @@ void Motor::set_max_freq(unsigned spd)
 }
 	
 void Motor::handleReadyRead(){
+	std::cout << "Mark" << __LINE__ << __FUNCTION__ << std::endl;
 	 auto read_bytes = serport_.readAll();
 	 for(const auto& byte: read_bytes){
 		 linebuf_.append(1,static_cast<char>(byte));
-		 if(byte == '\n'){
+		 if(byte == '\r'){
 			 logfun_(linebuf_);
 			 linebuf_.clear();
 			 continue;

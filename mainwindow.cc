@@ -79,12 +79,29 @@ void MainWindow::changed_freq_dial(int freq)
 	}
 }
 
-void MainWindow::on_actionExit_triggered()
+void MainWindow::on_send_btn_clicked()
 {
-    this->close();
+	std::string cmdtxt = ui->cmd_input->text().toUtf8().constData();
+	append_to_log(fmt::format("INP:{}",cmdtxt));
+	if(motor){
+		motor->send_cmd(cmdtxt);
+	}
+	ui->cmd_input->clear();
 }
 
 void MainWindow::append_to_log(const std::string& s)
 {
 	ui->log->append(QString::fromStdString(s));
 }
+
+void MainWindow::on_set_step_btn_clicked()
+{
+	auto stepping = (1 << ui->stepping_selector->value());
+	append_to_log(fmt::format("I set up for stepping with 1/{:d} steps"
+				,stepping));
+	if(stepping >= 2 && stepping <= 255 && motor){
+		motor->send_cmd(fmt::format("g{:d}",stepping));
+	}
+
+}
+
